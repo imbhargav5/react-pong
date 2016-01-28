@@ -1,2 +1,1 @@
-# learn-programming-accounts
-Auth for Learn Accounts
+# React ping-pong
