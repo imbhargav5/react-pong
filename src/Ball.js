@@ -5,10 +5,11 @@ class Ball extends React.Component{
 	constructor(args){
 		super();
 		this.onDie = args.onDie;
+		this.onBarCollision = args.onBarCollision;
 		this.position = args.position;
 		this.velocity = {
 			x : randomNumBetween(-5,5),
-			y : randomNumBetween(-5,5)
+			y : randomNumBetween(2,5)
 		};
 		this.radius = 15;
 	}
@@ -17,6 +18,7 @@ class Ball extends React.Component{
 			this.velocity.x = -this.velocity.x;
 		}else if(args.direction ==='y'){
 			this.velocity.y = -this.velocity.y;
+			this.onBarCollision();
 		}else{
 			this.velocity.x = -this.velocity.x;
 			this.velocity.y = -this.velocity.y;
@@ -36,7 +38,7 @@ class Ball extends React.Component{
 	    else if((this.position.x - this.radius) < 10 || (this.position.x + this.radius) > state.screen.width){
 	    	this.collide({direction : 'x'});
 	    }
-
+	    
 		const {context} = state;
 		context.save();
 		context.translate(this.position.x, this.position.y);

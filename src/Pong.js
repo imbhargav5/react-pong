@@ -3,6 +3,9 @@ import Ball from './Ball';
 import Wall from './Wall';
 import Bar from './Bar';
 
+import {BAR_HEIGHT, BAR_WIDTH, BAR_POSITION, WALL_WIDTH, POINTS_PER_COLLISION} from './helpers';
+
+
 const KEY = {
   LEFT:  37,
   RIGHT: 39,
@@ -45,6 +48,10 @@ class Pong extends React.Component{
 		  }
 		});
 	}
+	updateScore(){
+		this.setState({currentScore : this.state.currentScore + POINTS_PER_COLLISION});
+		console.log(this.state.currentScore);
+	}
 
 	componentDidMount() {
 	    window.addEventListener('keyup',   this.handleKeys.bind(this, false));
@@ -81,12 +88,13 @@ class Pong extends React.Component{
 				y: this.state.screen.height/2
 			},
 			create: this.createObject.bind(this),
-			onDie: this.gameOver.bind(this)
+			onDie: this.gameOver.bind(this),
+			onBarCollision : this.updateScore.bind(this)
 			});
 		let leftWall = new Wall({
 			size :{
 				height : this.state.screen.height,
-				width : 10
+				width : WALL_WIDTH
 			},
 			position : {
 				x: 0,
@@ -96,7 +104,7 @@ class Pong extends React.Component{
 		let rightWall = new Wall({
 			size :{
 				height : this.state.screen.height,
-				width : 10
+				width : WALL_WIDTH
 			},
 			position : {
 				x: this.state.screen.width-10,
@@ -106,22 +114,22 @@ class Pong extends React.Component{
 
 		let bottomBar = new Bar({
 			size :{
-				height : 10,
-				width : 200
+				height : BAR_HEIGHT,
+				width : BAR_WIDTH
 			},
 			position : {
-				x: (this.state.screen.width)/2 - 100,
-				y: (this.state.screen.height) - 30
+				x: (this.state.screen.width)/2 - BAR_WIDTH/2,
+				y: (this.state.screen.height) - (BAR_POSITION+BAR_HEIGHT)
 			}
 		});
 		let topBar = new Bar({
 			size :{
-				height : 10,
-				width : 200
+				height : BAR_HEIGHT,
+				width : BAR_WIDTH
 			},
 			position : {
-				x: (this.state.screen.width)/2 - 100,
-				y:  10
+				x: (this.state.screen.width)/2 - BAR_WIDTH/2,
+				y:  BAR_POSITION 
 			}
 		});
 		
@@ -140,7 +148,7 @@ class Pong extends React.Component{
 		this.setState({
 	      inGame: false
 	    });
-	    alert('gameOver');
+	    console.log('gameOver');
 	}
 
 	componentWillUnmount() {
@@ -256,11 +264,6 @@ class Pong extends React.Component{
 					console.log('case8')
 					ball.collide({direction:'y'});
 				}
-
-				
-
-				
-				
 				
 			})
 		});

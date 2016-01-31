@@ -4,14 +4,19 @@ import React from 'react';
 class Bar extends React.Component{
 	constructor(args){
 		super();
-		this.radius = 10;
 		let x = args.position.x, y = args.position.y;
 		this.position= {x,y};
 		this.size = args.size;
+		this.acceleration = 0.5;
+		this.inertia = 1;
 		this.velocity = {
 			x : 0,
 			y : 0
 		}
+		this.updateVertices();
+	}
+
+	updateVertices(){
 		this.vertices = {
 			top : {
 				x: this.position.x,
@@ -32,28 +37,52 @@ class Bar extends React.Component{
 		};
 	}
 
+	accelerate(direction,state){
+		if(direction === 'LEFT'){
+			//accelerating left
+			if(this.velocity.x>0){
+		    		this.velocity.x -= this.inertia;
+		    	}else{
+		    		this.velocity.x -= this.acceleration;	
+		    	}
+		}
+		else{
+			//accelerating right
+			
+		    if(this.velocity.x<0){
+		    		this.velocity.x += this.inertia;
+		    	}else{
+		    		this.velocity.x += this.acceleration;	
+		    	}
+		}
+		
+	}
+
+	collide(direction){
+		if(direction ==='X'){
+			this.velocity.x = this.velocity.x * (-0.25);
+		}
+	}
+
 	render(state){
 		const position = this.position;
 		const {context,keys} = state;
-		if(keys.left){
-			if(this.velocity.x>0){
-				this.velocity.x = 0;
-			}
-			else{
-				this.velocity.x = -3;
-			}
-			
+		if(keys.left && !keys.right){
+			this.accelerate('LEFT',state);				
 		}
-		if(keys.right){
-			if(this.velocity.x<0){
-				this.velocity.x=0;
-			}else{
-				this.velocity.x =3;	
-			}
-			
+		if(keys.right && !keys.left){
+			this.accelerate('RIGHT',state);
 		}
-		this.position.x+=this.velocity.x;
-		console.log(keys);
+		if((this.vertices.left.x ) <= 10){
+			this.collide('X');
+			this.position.x = 10;
+		}
+		else if((this.vertices.right.x + 10) >= state.screen.width){
+			this.collide('X');
+			this.position.x = state.screen.width - 10 - this.size.width;
+		}
+	    this.position.x+=this.velocity.x;
+		this.updateVertices();
 		context.save();
 		context.strokeStyle = '#fff';
 	    context.fillStyle = '#000';
