@@ -16,3 +16,7 @@ Bhargav Ponnapalli
 https://github.com/chriz001/Reacteroids
 
 Dan Abramov
+
+### License
+
+MIT @ 2016 Bhargav Ponnapalli
