@@ -3,7 +3,7 @@ import Ball from './Ball';
 import Wall from './Wall';
 import Bar from './Bar';
 
-import {BAR_HEIGHT, BAR_WIDTH, BAR_POSITION, WALL_WIDTH, POINTS_PER_COLLISION} from './helpers';
+import {BAR_HEIGHT, BAR_WIDTH, BAR_POSITION, WALL_WIDTH, POINTS_PER_COLLISION, BALL_RADIUS} from './helpers';
 
 
 const KEY = {
@@ -87,6 +87,7 @@ class Pong extends React.Component{
 				x: this.state.screen.width/2,
 				y: this.state.screen.height/2
 			},
+			radius : BALL_RADIUS,
 			create: this.createObject.bind(this),
 			onDie: this.gameOver.bind(this),
 			onBarCollision : this.updateScore.bind(this)
@@ -107,7 +108,7 @@ class Pong extends React.Component{
 				width : WALL_WIDTH
 			},
 			position : {
-				x: this.state.screen.width-10,
+				x: this.state.screen.width-WALL_WIDTH,
 				y: 0
 			}
 		});
@@ -145,9 +146,12 @@ class Pong extends React.Component{
 		this[group].push(item);
 	}
 	gameOver(){
+		var newTopScore = this.state.topScore < this.state.currentScore ? this.state.currentScore : this.state.topScore;
 		this.setState({
-	      inGame: false
+	      inGame: false,
+	      topScore : newTopScore
 	    });
+	    localStorage['topscore'] = newTopScore;
 	    console.log('gameOver');
 	}
 
@@ -270,10 +274,12 @@ class Pong extends React.Component{
 	}
 	render(){
 		let endGame;
+		let scores = <div style={{position:"fixed",top:"0",left:"0",right:"0",height:"15px",padding:"5px 25px"}}>
+			<div style={{float:"right", marginLeft:"10px"}}> Score : {this.state.currentScore} </div>
+			<div style={{float:"right", marginLeft:"10px"}}> TopScore : {this.state.topScore} </div>
+		</div>
 
-		return <div>
-		 <canvas ref="canvas" width={this.state.screen.width} height={this.state.screen.height} />
-		</div>;
+		return <div>{scores}<canvas ref="canvas" width={this.state.screen.width} height={this.state.screen.height} /></div>;
 	}
 };
 

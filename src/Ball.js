@@ -1,5 +1,5 @@
 import React from 'react';
-import {randomNumBetween} from './helpers';
+import {randomNumBetween, WALL_WIDTH} from './helpers';
 
 class Ball extends React.Component{
 	constructor(args){
@@ -11,7 +11,7 @@ class Ball extends React.Component{
 			x : randomNumBetween(-5,5),
 			y : randomNumBetween(2,5)
 		};
-		this.radius = 15;
+		this.radius = args.radius;
 	}
 	collide(args){
 		if(args.direction ==='x'){
@@ -35,7 +35,7 @@ class Ball extends React.Component{
 	    if((this.position.y - this.radius )<0 || (this.position.y + this.radius )> state.screen.height){
 	    	this.destroy();
 	    }
-	    else if((this.position.x - this.radius) < 10 || (this.position.x + this.radius) > state.screen.width){
+	    else if((this.position.x - this.radius) < WALL_WIDTH || (this.position.x + this.radius + WALL_WIDTH) > state.screen.width){
 	    	this.collide({direction : 'x'});
 	    }
 	    

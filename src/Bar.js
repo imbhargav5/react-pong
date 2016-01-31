@@ -1,5 +1,5 @@
 import React from 'react';
-
+import {WALL_WIDTH} from './helpers';
 
 class Bar extends React.Component{
 	constructor(args){
@@ -73,13 +73,13 @@ class Bar extends React.Component{
 		if(keys.right && !keys.left){
 			this.accelerate('RIGHT',state);
 		}
-		if((this.vertices.left.x ) <= 10){
+		if((this.vertices.left.x ) <= WALL_WIDTH){
 			this.collide('X');
-			this.position.x = 10;
+			this.position.x = WALL_WIDTH;
 		}
-		else if((this.vertices.right.x + 10) >= state.screen.width){
+		else if((this.vertices.right.x + WALL_WIDTH) >= state.screen.width){
 			this.collide('X');
-			this.position.x = state.screen.width - 10 - this.size.width;
+			this.position.x = state.screen.width - WALL_WIDTH - this.size.width;
 		}
 	    this.position.x+=this.velocity.x;
 		this.updateVertices();
