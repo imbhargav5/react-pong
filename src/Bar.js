@@ -2,6 +2,8 @@ import React from 'react';
 import {WALL_WIDTH} from './helpers';
 
 class Bar extends React.Component{
+
+
 	constructor(args){
 		super();
 		let x = args.position.x, y = args.position.y;
@@ -63,6 +65,7 @@ class Bar extends React.Component{
 			this.velocity.x = this.velocity.x * (-0.25);
 		}
 	}
+
 
 	render(state){
 		const position = this.position;

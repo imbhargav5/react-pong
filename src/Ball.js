@@ -22,7 +22,19 @@ class Ball extends React.Component{
 		}else{
 			this.velocity.x = -this.velocity.x;
 			this.velocity.y = -this.velocity.y;
+			this.onBarCollision();
 		}
+	}
+	accelerateX(direction){
+		if(direction === 'LEFT'){
+			this.velocity.x -=3;
+		}else{
+			this.velocity.x +=3;
+		}
+	}
+	setPosition(x,y){
+		this.position.x = x;
+		this.position.y = y;
 	}
 	destroy(){
 		this.delete = true;
@@ -33,9 +45,16 @@ class Ball extends React.Component{
 		this.position.y += this.velocity.y;
 
 	    if((this.position.y - this.radius )<0 || (this.position.y + this.radius )> state.screen.height){
-	    	this.destroy();
+	    	return this.destroy();
 	    }
-	    else if((this.position.x - this.radius) < WALL_WIDTH || (this.position.x + this.radius + WALL_WIDTH) > state.screen.width){
+	    
+	    //edges
+	    if((this.position.x - this.radius) < WALL_WIDTH){
+	    	this.position.x = WALL_WIDTH + this.radius;
+	    	this.collide({direction : 'x'});
+	    }
+	    if((this.position.x + this.radius + WALL_WIDTH) > state.screen.width){
+	    	this.position.x = state.screen.width - WALL_WIDTH - this.radius;
 	    	this.collide({direction : 'x'});
 	    }
 	    
